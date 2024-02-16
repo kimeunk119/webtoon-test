@@ -16,16 +16,18 @@ class _HomeScreenState extends State<HomeScreen> {
   int totalpomodoro = 0;
 
   void onTick(Timer timer) {
-    if (totalSeconds == 0) {
-      setState(() {
-        totalpomodoro = totalpomodoro + 1;
-        isrunning = false;
-        totalSeconds = twentyfive;
-      });
-    } else {
-      setState(() {
-        totalSeconds = totalSeconds - 1;
-      });
+    if (isrunning == true) {
+      if (totalSeconds == 0) {
+        setState(() {
+          totalpomodoro = totalpomodoro + 1;
+          isrunning = false;
+          totalSeconds = twentyfive;
+        });
+      } else {
+        setState(() {
+          totalSeconds = totalSeconds - 1;
+        });
+      }
     }
   }
 
@@ -47,6 +49,13 @@ class _HomeScreenState extends State<HomeScreen> {
     var duration = Duration(seconds: seconds);
 
     return duration.toString().split(".").first.substring(2, 7);
+  }
+
+  void reset() {
+    setState(() {
+      totalSeconds = twentyfive;
+      isrunning = false;
+    });
   }
 
   @override
@@ -72,13 +81,23 @@ class _HomeScreenState extends State<HomeScreen> {
           Flexible(
             flex: 3,
             child: Center(
-              child: IconButton(
-                iconSize: 120,
-                color: Theme.of(context).cardColor,
-                onPressed: isrunning ? onPaused : onStartPressed,
-                icon: Icon(isrunning
-                    ? Icons.pause_circle_outline
-                    : Icons.play_circle_outline),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    iconSize: 120,
+                    color: Theme.of(context).cardColor,
+                    onPressed: isrunning ? onPaused : onStartPressed,
+                    icon: Icon(isrunning
+                        ? Icons.pause_circle_outline
+                        : Icons.play_circle_outline),
+                  ),
+                  IconButton(
+                      iconSize: 60,
+                      color: Theme.of(context).cardColor,
+                      onPressed: reset,
+                      icon: const Icon(Icons.adjust_rounded)),
+                ],
               ),
             ),
           ),
